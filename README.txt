@@ -1,6 +1,6 @@
 
 CONTENTS OF THIS FILE
----------------------
+--------------------- EXTRA WORDS!!!
 
  * About Drupal
  * Configuration and features
