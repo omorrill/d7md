@@ -12,10 +12,6 @@
 function hello_block_info() {
   $blocks['hello'] = array(
     'info' => t('Hello'),
-	'status' => TRUE,
-	'region' => 'sidebar_second',
-	'visibility' => BLOCK_VISIBILITY_LISTED,
-    'cache' => DRUPAL_NO_CACHE,
   );
 
   return $blocks;
