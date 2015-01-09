@@ -1,0 +1,3 @@
+name = Hello block
+description = A practice module for creating a custom block.
+core = 7.x

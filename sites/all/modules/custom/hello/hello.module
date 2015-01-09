@@ -1,0 +1,40 @@
+<?php
+/**
+ * @file
+ * Module file for hello.
+ */
+ 
+/**
+ * Implements hook_block_info().
+ *
+ * This hook declares what blocks are provided by the module.
+ */
+function hello_block_info() {
+  $blocks['hello'] = array(
+    'info' => t('Hello'),
+	'status' => TRUE,
+	'region' => 'sidebar_second',
+	'visibility' => BLOCK_VISIBILITY_LISTED,
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ *
+ * This hook generates the contents of the blocks themselves.
+ */
+function hello_block_view($delta = '') {
+  $block = array();
+  
+  switch ($delta) {
+    case 'hello':
+	  $block['subject'] = t('Hello');
+	  $block['content'] = t('Hello, world!');
+	break;
+  }
+  
+  return $block;
+}
