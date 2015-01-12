@@ -10,11 +10,7 @@
  * This hook declares what blocks are provided by the module.
  */
 function hello_block_info() {
-  $blocks['hello'] = array(
-    'info' => t('Hello'),
-  );
-
-  return $blocks;
+  
 }
 
 /**
@@ -23,14 +19,5 @@ function hello_block_info() {
  * This hook generates the contents of the blocks themselves.
  */
 function hello_block_view($delta = '') {
-  $block = array();
   
-  switch ($delta) {
-    case 'hello':
-	  $block['subject'] = t('Hello');
-	  $block['content'] = t('Hello, world!');
-	break;
-  }
-  
-  return $block;
 }
