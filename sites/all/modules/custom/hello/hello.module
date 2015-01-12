@@ -1,23 +1,83 @@
 <?php
 /**
  * @file
- * Module file for hello.
+ * Hello world custom block creation.
  */
  
 /**
  * Implements hook_block_info().
- *
- * This hook declares what blocks are provided by the module.
  */
 function hello_block_info() {
+  $blocks = array();
   
+  $blocks['hello_world'] = array(
+    'info' => t('Hello World Block'),
+  );
+  
+  $blocks['hello_user'] = array(
+    'info' => t('Hello User Block'),
+  );
+  
+  $blocks['user_info'] = array(
+    'info' => t('User Information Block'),
+  );
+  
+  return $blocks;
 }
 
 /**
  * Implements hook_block_view().
- *
- * This hook generates the contents of the blocks themselves.
  */
 function hello_block_view($delta = '') {
+  $block = array();
   
+  switch($delta) {
+    case 'hello_world':
+      $block['subject'] = t('Hello World!!!');
+      $block['content'] = t('This is the hello world block.');
+      break;
+    
+    case 'hello_user':
+      $block['subject'] = t('Hello World');
+      
+      $hour = date('G');
+      $greeting = '';
+      if ($hour > 12) {
+	$greeting = 'Good morning @user!';
+      }
+      elseif ($hour > 18) {
+	$greeting = 'Good afternoon @user!';
+      }
+      else {
+	$greeting = 'Good evening @user!';
+      }
+      
+      $block['content'] = t($greeting, array('@user' => $GLOBALS['user']->name));
+      break;
+      
+    case 'user_info':
+      
+      if (arg(0) == 'user' && is_numeric(arg(1))) {
+	$account = user_load(arg(1));
+	
+	if (!empty($account)) {
+	  $block['subject'] = t('User Info');
+	  $output = '';
+	  
+	  $output .= '<div><label>' . t('Name') . '</label>' . $account->name . '</div>';
+	  $output .= '<div><label>' . t('Email') . '</label>' . $account->mail . '</div>';
+	  $output .= '<div><label>' . t('Created') . '</label>' . format_date($account->created) . '</div>';
+	  if ($account->access != 0) {
+	    $output .= '<div><label>' . t('Last Accessed') . '</label>' . format_date($account->access) . '</div>';
+	  } else {
+	    $output .='<div><label>' . t('Last Accessed') . '</label>This user hasn\'t logged in.</div>';
+	  }
+	  $block['content'] = $output;
+	}
+      }
+      
+      break;
+  }
+  
+  return $block;
 }
