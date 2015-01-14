@@ -1,0 +1,28 @@
+<?php
+/**
+ * @file
+ * Hello world menu routing practice.
+ */
+ 
+/**
+ * Implements hook_block_menu().
+ */
+function hello_menu_menu() {
+  $items = array();
+  
+  $items['hello'] = array(
+    'title' => 'Hello Menu',
+    'page callback' => 'hello_menu_simple_hello',
+    'access arguments' => array('access content'),
+    'menu_name' => 'main-menu',
+    'weight' => 1,
+  );
+  
+  return $items;
+}
+
+function hello_menu_simple_hello() {
+  $content = t('Hello world!');
+  
+  return $content;
+}

@@ -1,0 +1,13 @@
+<?php
+/**
+ * @file
+ * Hello world menu routing practice.
+ */
+ 
+/**
+ * Implements hook_block_menu().
+ */
+function hello_block_menu() {
+
+  
+}

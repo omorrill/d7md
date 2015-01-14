@@ -1,0 +1,5 @@
+name = Hello block
+description = A practice module for creating a custom block.
+core = 7.x
+package = DrupalTutor
+version = 7.x-1.0
