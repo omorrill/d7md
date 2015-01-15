@@ -1,83 +1,38 @@
 <?php
 /**
  * @file
- * Hello world custom block creation.
+ * Node metadata displayed in a tab next to "edit".
  */
  
 /**
- * Implements hook_block_info().
+ * Menu item for metadata tab
+ * Implements hook_menu for metadata sub-tab.
  */
-function hello_block_info() {
-  $blocks = array();
+function node_metadata_menu() {
+  $items = array();
   
-  $blocks['hello_world'] = array(
-    'info' => t('Hello World Block'),
+  $items['node/%node/metadata'] = array(
+    'title' => 'Metadata',
+    'page callback' => 'node_metadata_page',
+    'page arguments' => array(1),
+    'access arguments' => array('view node metadata'),
+    'file' => 'node_metadata.pages.inc',
+    'file path' => drupal_get_path('module', 'node_metadata') . '/includes',
+    'type' => MENU_LOCAL_TASK,
   );
   
-  $blocks['hello_user'] = array(
-    'info' => t('Hello User Block'),
-  );
-  
-  $blocks['user_info'] = array(
-    'info' => t('User Information Block'),
-  );
-  
-  return $blocks;
+  return $items;
 }
 
 /**
- * Implements hook_block_view().
+ * Permission to view tab
+ * Implements hook_permission for metadata view.
  */
-function hello_block_view($delta = '') {
-  $block = array();
-  
-  switch($delta) {
-    case 'hello_world':
-      $block['subject'] = t('Hello World!!!');
-      $block['content'] = t('This is the hello world block.');
-      break;
-    
-    case 'hello_user':
-      $block['subject'] = t('Hello World');
-      
-      $hour = date('G');
-      $greeting = '';
-      if ($hour > 12) {
-	$greeting = 'Good morning @user!';
-      }
-      elseif ($hour > 18) {
-	$greeting = 'Good afternoon @user!';
-      }
-      else {
-	$greeting = 'Good evening @user!';
-      }
-      
-      $block['content'] = t($greeting, array('@user' => $GLOBALS['user']->name));
-      break;
-      
-    case 'user_info':
-      
-      if (arg(0) == 'user' && is_numeric(arg(1))) {
-	$account = user_load(arg(1));
-	
-	if (!empty($account)) {
-	  $block['subject'] = t('User Info');
-	  $output = '';
-	    if (module_exists('devel')) {
-	      dpm(arg(0));
-	    }
-    
-	  $output .= '<div><label>' . t('Name') . '</label>' . $account->name . '</div>';
-	  $output .= '<div><label>' . t('Email') . '</label>' . $account->mail . '</div>';
-	  $output .= '<div><label>' . t('Created') . '</label>' . format_date($account->created) . '</div>';
-	    $access = ($account->access == 0) ? t('Never') : format_date($account->access);
-	  $output .= '<div><label>' . t('Last Accessed') . '</label>' . $access . '</div>';
-	  $block['content'] = $output;
-	}
-      }
-      
-      break;
-  }
-  
-  return $block;
+function node_metadata_permission() {
+  return array(
+    'view node metadata' => array(
+      'title' => t('View node metadata'),
+      'description' => t('View metadata for any node.'),
+    ),
+  );
 }

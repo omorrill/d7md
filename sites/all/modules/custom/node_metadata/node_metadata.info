@@ -1,5 +1,7 @@
-name = Hello block
-description = A practice module for creating a custom block.
+name = Node Metadata
+description = A practice module for showing node metadata.
 core = 7.x
 package = DrupalTutor
 version = 7.x-1.0
+
+files[] = node_metadata.pages.inc

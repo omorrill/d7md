@@ -42,10 +42,10 @@ function hello_block_view($delta = '') {
       
       $hour = date('G');
       $greeting = '';
-      if ($hour > 12) {
+      if ($hour < 12) {
 	$greeting = 'Good morning @user!';
       }
-      elseif ($hour > 18) {
+      elseif ($hour < 18) {
 	$greeting = 'Good afternoon @user!';
       }
       else {
