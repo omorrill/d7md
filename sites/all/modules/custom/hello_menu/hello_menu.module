@@ -79,18 +79,6 @@ function hello_menu_show_variable_title($variable_name) {
 
 function hello_menu_show_variable($variable_name) {
   $value = variable_get($variable_name, t('No value found for this variable.'));
-  
-  /*
-      $variables = variable_initialize();
-      $names = array_keys($variables);
-      $output = '<ul>';
-      foreach ($names as $name) {
-	$output .= '<li><strong>' . $name . ': </strong>' . variable_get($name, t('No value found for this variable.')) . '</li>';
-      }
-      $output .= '</ul>';
-      return $output;
-   * 
-   */
   return $value;
 }
 

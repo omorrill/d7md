@@ -1,13 +1,9 @@
 <?php
 /**
  * @file
- * Hello world menu routing practice.
+ * Limits editing of a node to 15 minutes after last edit.
  */
  
 /**
- * Implements hook_block_menu().
+ * Implements hook_menu().
  */
-function hello_block_menu() {
-
-  
-}
