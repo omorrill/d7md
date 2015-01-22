@@ -8,3 +8,34 @@
  * Menu item for metadata tab
  * Implements hook_menu for metadata sub-tab.
  */
+
+function node_metadata_menu() {
+ $items = array();
+ 
+ $items['node/%pirate/metadata'] = array(
+   'title' => 'Metadata',
+   'page callback' => 'node_metadata_page',
+   'page arguments' => array(1),
+   'access arguments' => array('view node metadata'),
+   'file' => 'node_metadata.pages.inc',
+   'file path' => drupal_get_path('module', 'node_metadata') . '/includes',
+   'type' => MENU_LOCAL_TASK,
+ );
+ 
+ return $items;
+}
+
+function pirate_load($nid) {
+  //dsm('You created a custom _load!');
+  $pirate = node_load($nid);
+  return $pirate;
+}
+
+function node_metadata_permission() {
+  return array(
+    'view node metadata' => array(
+      'title' => t('Node Metadata'),
+      'description' => t('Allow users to view node metadata tab.'),
+    ),
+  );
+}
