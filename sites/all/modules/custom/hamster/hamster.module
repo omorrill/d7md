@@ -5,5 +5,76 @@
  */
  
 /**
- * Implements hook_block_info().
+ * Implements hook_menu().
  */
+function hamster_menu() {
+  $items = array();
+  
+  $items['hamster'] = array(
+    'title' => t('Hamsters'),
+    'description' => t('All the hamsters are displayed here.'),
+    'page callback' => 'hamsters_list',
+    'access arguments' => array('access content'),
+  );
+  
+  return $items;
+}
+
+function hamsters_list() {
+  $output = '';
+  
+  $items_per_page = 10;
+  $total = db_query("SELECT COUNT(*) FROM {hamster}")->fetchField();
+  $page = pager_default_initialize($total, $items_per_page);
+  
+  $results = db_query_range("SELECT h.*,hh.name AS habitat_name FROM {hamster} h
+                             LEFT JOIN {hamster_habitat} hh ON h.habitat_id = hh.id", 
+                             $page * $items_per_page, $items_per_page);
+ 
+  $rows = array();
+  
+  foreach ($results as $record) {
+    $row = array(
+      $record->id,
+      $record->name,
+      $record->gender,
+      t('@weight g', array('@weight' => $record->weight)),
+      format_date($record->birthdate, 'custom', ('m/d/Y')),
+      theme('image_style', array('style_name' => 'thumbnail', 'path' => file_build_uri($record->image))),
+      $record->habitat_name,
+    );
+    $rows[] = $row;
+  }
+  
+  $header = array(
+    t('ID'),
+    t('Name'),
+    t('Gender'),
+    t('Weight'),
+    t('Birth Date'),
+    t('Image'),
+    t('Habitat'),
+  );
+  
+  $variables = array(
+    'header' => $header,
+    'rows' => $rows,
+  );
+  
+  $output .= theme('table', $variables);
+  $output .= theme('pager');
+  
+  return $output;
+}
+ 
+/**
+ * Implements hook_permission().
+ */
+function hamster_permission() {
+  return array(
+    'view hamster' => array(
+      'title' => t('View Hamster list'),
+      'description' => t('This gives you a list of every Hamster'),
+    ),
+  );
+}
