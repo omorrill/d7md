@@ -25,6 +25,13 @@ function hamster_menu() {
     'access arguments' => array('view hamster'),
   );
   
+  $items['hamster/insert'] = array(
+    'title' => t('DB insert'),
+    'description' => t('Add a hamster to the list.'),
+    'page callback' => 'hamster_insert',
+    'access arguments' => array('edit hamster'),
+  );
+  
   return $items;
 }
 
@@ -130,6 +137,10 @@ function hamster_permission() {
     'view hamster' => array(
       'title' => t('View Hamster list'),
       'description' => t('This gives you a list of every Hamster'),
+    ), //edit hamster
+    'edit hamster' => array(
+      'title' => t('Edit Hamster list'),
+      'description' => t('This gives you a way to add or delete hamsters.'),
     ),
   );
 }
