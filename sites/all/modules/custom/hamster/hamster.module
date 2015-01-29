@@ -14,10 +14,65 @@ function hamster_menu() {
     'title' => t('Hamsters'),
     'description' => t('All the hamsters are displayed here.'),
     'page callback' => 'hamsters_list',
-    'access arguments' => array('access content'),
+    'access arguments' => array('view hamster'),
+  );
+  
+  $items['hamster/%hamster'] = array(
+    'title callback' => 'hamster_page_title',
+    'title arguments' => array(1),
+    'page callback' => 'hamster_page',
+    'page arguments' => array(1),
+    'access arguments' => array('view hamster'),
   );
   
   return $items;
+}
+
+function hamster_theme($existing, $type, $theme, $path) {
+  return array(
+    'hamster_info' => array(
+      'variables' => array('hamster' => NULL),
+    ),
+  );
+}
+
+function theme_hamster_info($variables) {
+  $hamster = $variables['hamster'];
+  
+  drupal_add_css(drupal_get_path('module', 'hamster') . '/main.css');
+  
+  $output = '<div class="hamster-page">';
+    if (!empty($hamster->image)) {
+      $output .= '<div>' . theme('image_style', array('style_name' => 'large', 'path' => file_build_uri($hamster->image)));
+    }
+    $output .= '<div><label class="inline">' . t('ID') . ':</label> ' . $hamster->id . '</div>';
+    $output .= '<div><label class="inline">' . t('Gender') . ':</label> ' . $hamster->gender . '</div>';
+    $output .= '<div><label class="inline">' . t('Weight') . ':</label> ' . t('@weight g', array('@weight' => $hamster->weight)) . '</div>';
+    $output .= '<div><label class="inline">' . t('Birth Date') . ':</label> ' . format_date($hamster->birthdate, 'custom', ('m/d/Y')) . '</div>';
+    $age = REQUEST_TIME - $hamster->birthdate;
+    $output .= '<div><label class="inline">' . t('Age') . ':</label> ' . format_interval($age, 2) . '</div>';
+    $output .= '<div><label class="inline">' . t('Habitat') . ':</label> ' . $hamster->habitat_name . '</div>';
+    
+    $output .= '</div>';
+    
+    return $output; 
+}
+
+function hamster_page($hamster) {
+  return theme('hamster_info', array('hamster' => $hamster));
+    // First video @1:24
+}
+
+function hamster_page_title($hamster) {
+  return $hamster->name;
+}
+
+function hamster_load($id) {
+  $result = db_query('SELECT h.*, hh.name AS habitat_name FROM {hamster} h
+                      LEFT JOIN {hamster_habitat} hh ON h.habitat_id = hh.id 
+		      WHERE h.id = :id', array(':id' => $id))->fetchObject();
+  
+  return $result;
 }
 
 function hamsters_list() {
@@ -27,7 +82,7 @@ function hamsters_list() {
   $total = db_query("SELECT COUNT(*) FROM {hamster}")->fetchField();
   $page = pager_default_initialize($total, $items_per_page);
   
-  $results = db_query_range("SELECT h.*,hh.name AS habitat_name FROM {hamster} h
+  $results = db_query_range("SELECT h.*, hh.name AS habitat_name FROM {hamster} h
                              LEFT JOIN {hamster_habitat} hh ON h.habitat_id = hh.id", 
                              $page * $items_per_page, $items_per_page);
  
@@ -36,7 +91,7 @@ function hamsters_list() {
   foreach ($results as $record) {
     $row = array(
       $record->id,
-      $record->name,
+      l($record->name, 'hamster/' . $record->id),
       $record->gender,
       t('@weight g', array('@weight' => $record->weight)),
       format_date($record->birthdate, 'custom', ('m/d/Y')),
