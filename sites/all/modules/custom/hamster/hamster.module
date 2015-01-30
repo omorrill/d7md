@@ -32,7 +32,55 @@ function hamster_menu() {
     'access arguments' => array('edit hamster'),
   );
   
+  $items['hamster/update'] = array(
+    'title' => t('DB Update'),
+    'description' => t('Update a hamster to the list.'),
+    'page callback' => 'hamster_update',
+    'access arguments' => array('edit hamster'),
+  );
+  
+  $items['hamster/delete'] = array(
+    'title' => t('DB Delete'),
+    'description' => t('Delete a hamster to the list.'),
+    'page callback' => 'hamster_delete',
+    'access arguments' => array('edit hamster'),
+  );
+  
   return $items;
+}
+
+function hamster_delete() {
+  db_query("DELETE FROM {hamster} WHERE name = :name",
+    array(
+      ':name' => 'Test',
+    )
+  );
+  return t('Updated.');
+}
+
+function hamster_update() {
+  db_query("UPDATE {hamster} SET habitat_id = :habitat WHERE name = :name",
+    array(
+      ':name' => 'Test',
+      ':habitat' => 1,
+    )
+  );
+  return t('Updated.');
+}
+
+function hamster_insert() {
+  db_query("INSERT INTO {hamster} (name, gender, weight, birthdate, image, habitat_id)
+            VALUES (:name, :gender, :weight, :birthdate, :image, :habitat_id)",
+  array(
+    ':name' => 'Test',
+    ':gender' => 'male',
+    ':weight' => 150,
+    ':birthdate' => REQUEST_TIME,
+    ':image' => '',
+    ':habitat_id' => 3,
+    )
+  );
+  return t('Done');
 }
 
 function hamster_theme($existing, $type, $theme, $path) {
@@ -137,7 +185,7 @@ function hamster_permission() {
     'view hamster' => array(
       'title' => t('View Hamster list'),
       'description' => t('This gives you a list of every Hamster'),
-    ), //edit hamster
+    ), 
     'edit hamster' => array(
       'title' => t('Edit Hamster list'),
       'description' => t('This gives you a way to add or delete hamsters.'),
