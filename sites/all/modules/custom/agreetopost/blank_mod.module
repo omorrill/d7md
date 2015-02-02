@@ -1,0 +1,9 @@
+<?php
+/**
+ * @file
+ * Hamsters in databases.
+ */
+ 
+/**
+ * Implements hook_menu().
+ */
