@@ -81,8 +81,46 @@ function hamster_menu() {
     'access arguments' => array('edit hamster'),
   );
   
+  $items['hamster-write/insert'] = array(
+    'title' => t('DB insert'),
+    'page callback' => 'hamster_write_insert',
+    'access arguments' => array('edit hamster'),
+  );
+  
+  $items['hamster-write/update'] = array(
+    'title' => t('DB Update'),
+    'page callback' => 'hamster_write_update',
+    'access arguments' => array('edit hamster'),
+  );
+  
   return $items;
 }
+
+// SCHEMA CRUD
+function hamster_write_update() {
+  $hamster = array(
+      'id' => 23,
+      'habitat_id' => 4,
+    );  
+  drupal_write_record('hamster', $hamster, array('id'));
+  
+  return t('Done.');
+}
+
+function hamster_write_insert() {
+  $hamster = array(
+    'id' => 23,
+    'name' => 'Test',
+    'gender' => 'male',
+    'weight' => 150,
+    'birthdate' => REQUEST_TIME,
+    'image' => '',
+    'habitat_id' => 3,
+    );
+  drupal_write_record('hamster', $hamster);
+  return t('Done.');
+}
+// SCHEMA END CRUD
 
 function hamster_delete() {
   db_query("DELETE FROM {hamster} WHERE name = :name",
@@ -90,7 +128,7 @@ function hamster_delete() {
       ':name' => 'Test',
     )
   );
-  return t('Updated.');
+  return t('Deleted.');
 }
 
 function hamster_update() {
