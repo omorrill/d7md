@@ -1,0 +1,45 @@
+<?php
+/**
+ * @file
+ * Agree to post.
+ */
+ 
+/**
+ * Implements hook_form_alter().
+ */
+function agree_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'article_node_form') {
+    $form['title']['#title'] = t('Article Title');
+    $form['field_image']['#weight'] = -4;
+    $form['field_image']['#access'] = ($GLOBALS['user']->uid == 1) ? TRUE : FALSE;
+    
+    $form['agree'] = array(
+      '#title' => t('Agree to site Terms & Conditions and post?'),
+      '#type' => 'checkbox',
+      '#weight' => 100,
+    );
+    if (!empty($form['nid']['#value'])) {
+      $form['agree']['#disabled'] = TRUE;
+      $form['agree']['#default_value'] = TRUE;
+    }    
+    $form['actions']['#weight'] = 101;
+    
+    $form['#validate'][] = 'agree_validation_owen';
+    
+    array_unshift($form['actions']['submit']['#submit'], 'agree_submission_owen');
+    
+    dpm($form);
+  }
+}
+
+function agree_validation_owen($form, &$form_state) {
+  if (isset($form_state['values']['agree']) && empty($form_state['values']['agree'])) {
+    form_set_error('agree', t('You must agree to the Terms & Conditions.'));
+  }
+}
+
+function agree_submission_owen($form, &$form_state) {
+  if (isset($form_state['values']['agree']) && !empty($form_state['values']['agree'])) {
+    drupal_set_message(t('You have agreed to the Terms & Conditions.'), 'status');
+  }
+}

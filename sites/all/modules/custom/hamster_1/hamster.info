@@ -1,7 +1,0 @@
-name = Hamster
-description = A practice module for and changing database records.
-core = 7.x
-package = DrupalTutor
-version = 7.x-1.0
-
-;stylesheets[all][] = main.css
