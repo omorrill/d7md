@@ -1,0 +1,81 @@
+<?php
+
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/*
+ * Implements the hook_schema().
+ */
+function hamster_schema() {
+  $schema['hamster'] = array(
+  'description' => 'TODO: please describe this table!',
+  'fields' => array(
+    'id' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'serial',
+      'not null' => TRUE,
+    ),
+    'name' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '255',
+      'not null' => TRUE,
+    ),
+    'gender' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '20',
+      'not null' => TRUE,
+    ),
+    'weight' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'birthdate' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'image' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '255',
+      'not null' => TRUE,
+    ),
+    'habitat_id' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+  ),
+  'primary key' => array('id'),
+);
+  
+$schema['hamster_habitat'] = array(
+  'description' => 'TODO: please describe this table!',
+  'fields' => array(
+    'id' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'serial',
+      'not null' => TRUE,
+    ),
+    'name' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '255',
+      'not null' => TRUE,
+    ),
+    'capacity' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+  ),
+  'primary key' => array('id'),
+);
+  return $schema;
+}
