@@ -27,6 +27,12 @@ function hamster_views_data() {
     'field' => array(
       'handler' => 'views_handler_field_numeric',
     ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_numeric',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
   );
   
   $data['hamster']['name'] = array(
@@ -34,6 +40,12 @@ function hamster_views_data() {
     'help' => t('The name of the hamster.'),
     'field' => array(
       'handler' => 'views_handler_field',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_string',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
     ),
   );
   
@@ -43,6 +55,13 @@ function hamster_views_data() {
     'field' => array(
       'handler' => 'views_handler_field',
     ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_in_operator',
+      'options callback' => 'hamster_views_gender_options',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
   );
   
   $data['hamster']['weight'] = array(
@@ -51,13 +70,25 @@ function hamster_views_data() {
     'field' => array(
       'handler' => 'views_handler_field_numeric',
     ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_numeric',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
   );
   
   $data['hamster']['birthdate'] = array(
     'title' => t('Birth Day'),
     'help' => t('The birthdate of the hamster.'),
     'field' => array(
-      'handler' => 'views_handler_field',
+      'handler' => 'views_handler_field_date',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_date',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort_date',
     ),
   );
   
@@ -65,7 +96,10 @@ function hamster_views_data() {
     'title' => t('Image'),
     'help' => t('The image file of the hamster.'),
     'field' => array(
-      'handler' => 'views_handler_field',
+      'handler' => 'hamster_views_handler_field_image',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter',
     ),
   );
   
@@ -75,7 +109,67 @@ function hamster_views_data() {
     'field' => array(
       'handler' => 'views_handler_field',
     ),
+    'relationship' => array(
+      'label' => t('Habitat'),
+      'base' => 'hamster_habitat',
+      'base field' => 'id',
+    ),
+  );
+  
+  $data['hamster_habitat']['table'] = array(
+    'group' => t('Hamster Habitat'),
+    'title' => t('Hamster Habitat Information'),
+    'help' => t('List information about hamster habitats.'),
+  );
+  
+  $data['hamster_habitat']['id'] = array(
+    'title' => t('ID'),
+    'help' => t('The ID of the hamster habitat.'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_numeric',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+  
+  $data['hamster_habitat']['name'] = array(
+    'title' => t('Habitat Name'),
+    'help' => t('The name of the hamster habitat.'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_string',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+  
+  $data['hamster_habitat']['capacity'] = array(
+    'title' => t('Capacity'),
+    'help' => t('The capacity of the hamster habitat.'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_numeric',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
   );
   
   return $data;
+}
+
+function hamster_views_gender_options() {
+  return array(
+    'male' => t('Male'),
+    'female' => t('Female'),
+  );
 }
