@@ -168,6 +168,7 @@ function hamster_edit_form_submit($form, &$form_state) {
     drupal_write_record('hamster', $hamster);
     drupal_set_message(t('Hamster %name created.', array('%name' => $hamster['name'])));
   }
+  cache_clear_all('perfdemo:hamsters:list', 'cache');
   
   if (!empty($hamster['image'])) {
     $file = file_load($form_state['values']['image']);
