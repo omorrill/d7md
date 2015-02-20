@@ -1,0 +1,17 @@
+diff --git a/modules/user/user.module b/modules/user/user.module
+index 60f32a1..b7dd61b 100644
+--- a/modules/user/user.module
++++ b/modules/user/user.module
+@@ -8,7 +8,7 @@
+ /**
+  * Maximum length of username text field.
+  */
+-define('USERNAME_MAX_LENGTH', 60);
++define('USERNAME_MAX_LENGTH', 10);
+ 
+ /**
+  * Maximum length of user e-mail text field.
+diff --git a/sites/all/modules/custom/filedemo.zip b/sites/all/modules/custom/filedemo.zip
+deleted file mode 100644
+index eff5776..0000000
+Binary files a/sites/all/modules/custom/filedemo.zip and /dev/null differ
