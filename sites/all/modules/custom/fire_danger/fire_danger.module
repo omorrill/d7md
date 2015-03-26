@@ -4,83 +4,38 @@
  * Fire Danger custom block creation.
  */
  
-/**
- * Implements hook_menu().
+/*
+ * Implements hook_block_configure().
  */
-function fire_danger_menu() {
-  $items = array();
-
-  $items['fire-danger'] = array(
-    'title' => t('Fire Danger Selector'),
-    'page callback' => 'fire_danger_page',
-    'access arguments' => array('select fire danger'),
-  );
-   
-  return $items;
+function fire_danger_block_configure($delta = '') {
+  $form = array();
+	  if ($delta == 'fire_danger') {
+		  $form['fire_danger_level'] = array(
+			'#title' => t('Fire Danger Level'),
+			'#type' => 'select',
+			'#options' => array(
+			  'high' => t('High'),
+			  'moderate' => t('Moderate'),
+			  'low' => t('Low'),
+			),
+			'#default_value' => variable_get('fire_danger_level', 'low'),
+			'#description' => t('Set the level to be displayed on the CSFD landing page.'),
+			'#required' => TRUE,
+		  );	
+	  }
+	return $form;
 }
 
-/*
- * Implements hook_permissions().
- */
-function fire_danger_permission() {
-  return array(
-    'select fire danger' => array(
-      'title' => t('Select Fire Danger Level'),
-      'description' => t('Select fire danger level to be displayed on the landing page of CSFD.'),
-    ),
-  );
-}
-
-/*
- * Implements hook_page();
- */
-function fire_danger_page() {
-  $form = drupal_get_form('fire_danger_form');
-  $output = drupal_render($form);
+function fire_danger_block_save($delta = '', $edit = array()) {
+  // This example comes from node.module.
+  if ($delta == 'fire_danger') {
+    variable_set('fire_danger_level', $edit['fire_danger_level']);
+	
+    $hml = variable_get('fire_danger_level', 'none');
   
-  return $output;
-}
-
-/*
- * Implements hook_form();
- */
-function fire_danger_form($form, &$form_state) {
-  $form['fire_danger_level'] = array(
-    '#title' => t('Fire Danger Level'),
-    '#type' => 'select',
-	'#options' => array(
-	  'high' => t('High'),
-	  'moderate' => t('Moderate'),
-      'low' => t('Low'),
-	),
-	'#default_value' => variable_get('fire_danger_level', 'low'),
-	'#description' => t('Set the level to be displayed on the CSFD landing page.'),
-    '#required' => TRUE,
-  );
-  
-  $form['send'] = array(
-    '#type' => 'submit',
-    '#value' => t('Set Fire Danger Level'),
-  );
-  
-  return $form;
-}
-
-/*
- * Process Fire Danger level and set variable for block.
- * Implements hook_form_submit().
- */
-function fire_danger_form_submit($form, &$form_state) {
-  // Rebuild the form.
-  $form_state['rebuild'] = true;
-  
-  // Save Fire Danger Level variable.
-  variable_set('fire_danger_level', $form_state['values']['fire_danger_level']);
-  
-  $hml = $form_state['values']['fire_danger_level'];
-  
-  // Notify user.
-  drupal_set_message(t('Fire Danger Level saved: %t.', array('%t' => $hml)));
+    // Notify user.
+    drupal_set_message(t('Fire Danger Level saved: %t.', array('%t' => $hml)));
+  }
 }
  
 /**
@@ -114,25 +69,26 @@ function fire_danger_block_view($delta = '') {
 }
 
 function fire_danger_title($severity) {
-  if ($severity == 'high') {
-    return t('Fire Danger: High');
-  } else if ($severity == 'moderate') {
-    return t('Fire Danger: Moderate');
-  } else if ($severity == 'low') {
-    return t('Fire Danger: Low');
-  } else {
-    return t('No Value');
-  }
+    return t('Fire Danger Level');
 }
 
 function fire_danger_content($severity) {
-  if ($severity == 'high')($severity == 'high') {
-    return t('Be very, very careful out there today.');
+  if ($severity == 'high') {
+    $level = '<div class="high"><h3>';
+    $level .= t('Fire Danger: High');
+	$level .= '</h3></div>';
+    return $level;
   } else if ($severity == 'moderate') {
-    return t('Don't screw this up. We're okay right now.');
+    $level = '<div class="moderate"><h3>';
+    $level .= t('Fire Danger: Moderate');
+	$level .= '</h3></div>';
+    return $level;
   } else if ($severity == 'low') {
-    return t('Eh, go ahead and play with fireworks. But safely, okay?');
+    $level = '<div class="low"><h3>';
+    $level .= t('Fire Danger: Low');
+	$level .= '</h3></div>';
+    return $level;
   } else {
-    return t('No value set.');
+    return t('');
   }
 }
